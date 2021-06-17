@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">PAM SQLite</string>
+    <array name="categorias">
+        <item>Alimento</item>
+        <item>Eletrodoméstico</item>
+        <item>Jogo</item>
+        <item>Livro</item>
+        <item>Vestuário</item>
+    </array>
+</resources>
