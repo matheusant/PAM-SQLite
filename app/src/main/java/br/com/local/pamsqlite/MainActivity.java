@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btnInserirDados:
                 try {
                     int insertCount = insertFromFile();
-                    Toast.makeText(this, "Total de artigos inseridos: "+ String.valueOf(insertCount), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Total de itens inseridos: "+ String.valueOf(insertCount), Toast.LENGTH_SHORT).show();
                 }catch (IOException e){
                     e.printStackTrace();
                 }
