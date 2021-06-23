@@ -80,10 +80,10 @@ public class ProdutosAdapter extends ArrayAdapter<Produtos> {
                         String sql = "DELETE FROM tbprodutos WHERE id = ?";
                         meuBancoDeDados.execSQL(sql, new Integer[]{produtos.getId()});
                         Toast.makeText(ctx, "Deletado com Sucesso", Toast.LENGTH_SHORT).show();
+                        recarregarDados();
 
                     }
                 });
-                recarregarDados();
                 builder.setNegativeButton("Não", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
