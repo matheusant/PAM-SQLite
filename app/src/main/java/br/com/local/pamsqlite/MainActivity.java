@@ -20,8 +20,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -32,8 +34,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final String FILE_SQL = "file.sql";
     EditText edtNomeProduto, edtPreco;
     Spinner spnCategoriaProduto;
+    Boolean success = false;
 
-    Button btnAddProduto, btnVisualizaProduto, btnInserirDados;
+    Button btnAddProduto, btnVisualizaProduto, btnInserirDados, btnEscrever;
 
     SQLiteDatabase meuBancoDeDados;
 
@@ -49,10 +52,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnAddProduto = findViewById(R.id.btnAddProduto);
         btnVisualizaProduto = findViewById(R.id.btnVisualizaProduto);
         btnInserirDados = findViewById(R.id.btnInserirDados);
+        btnEscrever = findViewById(R.id.btnEscrever);
 
         btnAddProduto.setOnClickListener(this);
         btnVisualizaProduto.setOnClickListener(this);
         btnInserirDados.setOnClickListener(this);
+        btnEscrever.setOnClickListener(this);
 
         meuBancoDeDados = openOrCreateDatabase(NOME_BANCO_DE_DADOS, MODE_PRIVATE, null);
 
@@ -128,7 +133,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 try {
                     int insertCount = insertFromFile();
                     Toast.makeText(this, "Total de itens inseridos: "+ String.valueOf(insertCount), Toast.LENGTH_SHORT).show();
+                    success = true;
                 }catch (IOException e){
+                    e.printStackTrace();
+                }
+                break;
+            case R.id.btnEscrever:
+
+                try {
+                    FileWriter fw = new FileWriter(basePath+"/PASTA_SQL/teste.txt", success);
+                    PrintWriter pw = new PrintWriter(fw);
+                    pw.println("testando!!!!");
+                    pw.close();
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
                 break;
