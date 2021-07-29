@@ -1,6 +1,7 @@
 package br.com.local.pamsqlite;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
@@ -20,10 +21,14 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -34,7 +39,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final String FILE_SQL = "file.sql";
     EditText edtNomeProduto, edtPreco;
     Spinner spnCategoriaProduto;
-    Boolean success = false;
 
     Button btnAddProduto, btnVisualizaProduto, btnInserirDados, btnEscrever;
 
@@ -133,21 +137,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 try {
                     int insertCount = insertFromFile();
                     Toast.makeText(this, "Total de itens inseridos: "+ String.valueOf(insertCount), Toast.LENGTH_SHORT).show();
-                    success = true;
                 }catch (IOException e){
                     e.printStackTrace();
                 }
                 break;
             case R.id.btnEscrever:
+                String texto = edtNomeProduto.getText().toString();
+                String categProd = spnCategoriaProduto.getSelectedItem().toString();
 
                 try {
-                    FileWriter fw = new FileWriter(basePath+"/PASTA_SQL/teste.txt", success);
+                    FileWriter fw = new FileWriter(basePath+"/PASTA_SQL/"+categProd+".txt", true);
                     PrintWriter pw = new PrintWriter(fw);
-                    pw.println("testando!!!!");
+                    pw.println(texto);
                     pw.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                File file = new File(basePath, "/PASTA_SQL/"+categProd+".txt");
+                File file1 = new File(basePath, "/PASTA_SQL/COPIAS/"+categProd+"_copia.txt");
+                try {
+                    copyFile(file, file1);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Toast.makeText(this, "Arquivo Criado com Sucesso ;)", Toast.LENGTH_SHORT).show();
                 break;
         }
     }
@@ -192,8 +205,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void criarPasta(){
         File folder = new File(basePath + "/PASTA_SQL");
+        File pasta = new File(basePath + "/PASTA_SQL/COPIAS");
         if (!folder.exists()){
             folder.mkdir();
         }
+        if (!pasta.exists()){
+            pasta.mkdir();
+        }
+    }
+
+
+    public void copyFile(File src, File dest) throws IOException{
+        try(InputStream in = new FileInputStream(src)){
+            try(OutputStream out = new FileOutputStream(dest)){
+                byte[] buf = new byte[1024];
+                int len;
+                while ((len = in.read(buf)) > 0){
+                    out.write(buf, 0, len);
+                }
+            }
+        }
+
     }
 }
