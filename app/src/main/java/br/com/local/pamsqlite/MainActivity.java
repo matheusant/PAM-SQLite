@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             edtNomeProduto.requestFocus();
             return false;
         }
-        if (preco.isEmpty() || Integer.parseInt(preco) <= 0) {
+        if (preco.isEmpty() || Double.parseDouble(preco) <= 0) {
             edtPreco.setError("Insira o preço");
             edtPreco.requestFocus();
             return false;
